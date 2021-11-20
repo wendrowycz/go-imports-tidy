@@ -1,0 +1,13 @@
+package main
+
+import (
+
+	"github.com/namespace"
+
+	"fmt"
+	
+)
+
+func main() {
+	fmt.Println()
+}

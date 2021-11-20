@@ -1,0 +1,14 @@
+﻿input,expected,status
+alias_sorting_input,alias_sorting_expected,true
+invalid_imports_2_input,invalid_imports_2_expected,false
+invalid_imports_input,invalid_imports_expected,false
+no_imports_input,no_imports_expected,false
+one_group_input,one_group_expected,true
+only_stdlib_1_input,only_stdlib_1_expected,true
+only_stdlib_2_input,only_stdlib_2_expected,true
+only_stdlib_3_input,only_stdlib_3_expected,true
+three_groups_1_input,three_groups_1_expected,true
+three_groups_2_input,three_groups_2_expected,true
+two_groups_1_input,two_groups_1_expected,true
+two_groups_2_input,two_groups_2_expected,true
+two_groups_3_input,two_groups_3_expected,true

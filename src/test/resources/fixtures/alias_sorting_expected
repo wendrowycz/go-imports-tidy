@@ -1,0 +1,19 @@
+package main
+
+import (
+	c "flag"
+	_ "fmt"
+	"os"
+
+	_ "gitlab.com/namespace/a"
+	"gitlab.com/namespace/b"
+	a3 "gitlab.com/namespace/c"
+
+	d3 "github.com/namespace/a"
+	"github.com/namespace/b"
+	d1 "github.com/namespace/c"
+)
+
+func main() {
+	fmt.Println()
+}

@@ -1,0 +1,30 @@
+<idea-plugin>
+    <id>eu.oakroot.go-imports-tidy</id>
+    <name>GO Imports Tidy</name>
+    <vendor email="bartosz.grzesiak@oakroot.eu" url="http://oakroot.eu">OAK ROOT</vendor>
+
+    <description><![CDATA[This tool updates your Go import lines, grouping it into three groups:]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <projectConfigurable instance="TidyProjectSettingsConfigurable"/>
+<!--        <applicationService serviceImplementation="org.intellij"-->
+<!--        <applicationConfigurable parentId="tools" instance="eu.oakroot.ApplicationSettingsConfigurable"-->
+<!--                                 id="eu.oakroot.ApplicationSettingsConfigurable" displayName="GO Tidy Settings"/>-->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="eu.oakroot.GoImportTidy" class="GoImportTidy"
+                description="Group imports" text="GO Import Tidy">
+            <override-text place="MainMenu" text="Tidy Imports" />
+            <keyboard-shortcut first-keystroke="control alt A" second-keystroke="C" keymap="$default"/>
+            <mouse-shortcut keymap="$default" keystroke="control button3 doubleClick"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>

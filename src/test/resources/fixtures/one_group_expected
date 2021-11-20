@@ -1,0 +1,11 @@
+package main
+
+import (
+	"github.com/namespace/file/a"
+	"github.com/namespace/file/b"
+	"github.com/namespace/file/c"
+)
+
+func main() {
+	fmt.Println()
+}
