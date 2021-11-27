@@ -1,3 +1,5 @@
+package eu.oakroot;
+
 public class ParsedFile {
     private final String fileContent;
     private final Boolean isParsed;

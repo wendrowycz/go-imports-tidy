@@ -1,3 +1,5 @@
+package eu.oakroot;
+
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;

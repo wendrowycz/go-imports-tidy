@@ -1,3 +1,5 @@
+package eu.oakroot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +35,6 @@ public class TidyOptionsFactory {
         optionsMap.put(optionId, optionMap);
         options.get(TYPE.LOCAL).add(optionMap);
     }
-
-    public static String getOptionId(Enum<TYPE> optionsType, String key) {
-        return optionsType + "_" + key;
-    }
-
-//    public static Map<Enum<TYPE>, ArrayList<Map<String, String>>> getOptions() {
-//        return instance.options;
-//    }
 
     public static HashMap<String, String> getOptionById(String optionId) {
         return instance.optionsMap.get(optionId);

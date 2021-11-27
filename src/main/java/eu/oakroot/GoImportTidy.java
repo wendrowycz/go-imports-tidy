@@ -1,3 +1,5 @@
+package eu.oakroot;
+
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.command.WriteCommandAction;
@@ -7,17 +9,13 @@ import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class GoImportTidy extends AnAction {
-    private static final int PRE_IMPORT = 0;
-    private static final int IMPORT_SECTION = 1;
-    private static final int POST_IMPORT = 2;
     public static final int STD_LIB = 0;
     public static final int LOCAL_LIB = 2;
     public static final int EXTERNAL_LIB = 1;
@@ -45,45 +43,44 @@ public class GoImportTidy extends AnAction {
         if (virtualFile == null) {
             return;
         }
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(virtualFile.getPath()));
 
+        try {
+            String importsBlockStr = findImports(document.getText());
+            ArrayList<String> importsBlock = new ArrayList<>(Arrays.asList(importsBlockStr.split("\n")));
             String local = TidyProjectSettingsConfigurable.getOptionTextString(project, "localPrefix");
-            ParsedFile parsedFile = parseFile(bufferedReader, local);
+            ParsedFile parsedFile = parseFile(importsBlock, local);
             if (parsedFile.isParsed()) {
-                System.out.println(parsedFile.getFileContent());
+                String newContent = document.getText().replaceAll(importsBlockStr, parsedFile.getFileContent());
                 Runnable r = () -> {
                     document.setReadOnly(false);
-                    document.setText(parsedFile.getFileContent());
+                    document.setText(newContent);
                 };
                 WriteCommandAction.runWriteCommandAction(project, r);
             }
-            System.out.println(parsedFile.isParsed());
         } catch (IOException err) {
             err.printStackTrace();
         }
     }
 
-    public ParsedFile parseFile(BufferedReader file, String local) throws IOException {
-        ExtractedImports extractedImports = extractImports(file);
-        Map<Integer, List<String>> contents = extractedImports.getContents();
-        if (!extractedImports.getStatus() || contents.get(IMPORT_SECTION).size() == 0) {
-            return new ParsedFile("", false);
+    public String findImports(String document) {
+        String imps = StringUtils.substringBetween(document, "import (", ")");
+        if (imps == null) {
+            return "";
         }
-        ArrayList<String> imports = formatImports(contents.get(IMPORT_SECTION), local);
-        contents.get(IMPORT_SECTION).clear();
-        contents.get(IMPORT_SECTION).add("import (");
-        contents.get(IMPORT_SECTION).addAll(imports);
-        contents.get(IMPORT_SECTION).add(")");
-
-        List<String> results = new ArrayList<>();
-        for (Map.Entry<Integer, List<String>> entry : contents.entrySet()) {
-            results.addAll(entry.getValue());
-        }
-        return new ParsedFile(String.join("\n", results), true);
+        return imps;
     }
 
-    private ArrayList<String> formatImports(List<String> imports, String local) {
+    public ParsedFile parseFile(List<String> importsBlock, String local) throws IOException {
+        ArrayList<String> contents = extractImports(importsBlock);
+        if (contents.size() == 0) {
+            return new ParsedFile("", false);
+        }
+        ArrayList<String> imports = formatImports(contents, local);
+        String parsed = "\n" + String.join("\n", imports) + "\n";
+        return new ParsedFile(parsed, true);
+    }
+
+    private @NotNull ArrayList<String> formatImports(@NotNull List<String> imports, String local) {
         ArrayList<String> result = new ArrayList<>();
         boolean needEmptyLine = false;
         Map<Integer, List<String>> groups = new HashMap<>();
@@ -138,44 +135,19 @@ public class GoImportTidy extends AnAction {
         return EXTERNAL_LIB;
     }
 
-    private ExtractedImports extractImports(BufferedReader s) throws IOException {
-        ArrayList<String> preImportSec = new ArrayList<>();
+    private @NotNull ArrayList<String> extractImports(@NotNull List<String> importsBlock) {
         ArrayList<String> importSec = new ArrayList<>();
-        ArrayList<String> postImportSec = new ArrayList<>();
-        Map<Integer, List<String>> results = new HashMap<>() {{
-            put(PRE_IMPORT, preImportSec);
-            put(IMPORT_SECTION, importSec);
-            put(POST_IMPORT, postImportSec);
-        }};
-
-        String line;
-        int phase = PRE_IMPORT;
-
-        while ((line = s.readLine()) != null) {
-            int newPhase = nextPart(line, phase);
-            if (newPhase == phase) {
-                if ((!line.contains("\"")) && phase == IMPORT_SECTION) {
-                    continue;
-                }
-                results.get(phase).add(line);
+        for (String line : importsBlock) {
+            if (!line.contains("\"")) {
+                continue;
             }
-            phase = newPhase;
+            importSec.add(line);
         }
 
-        return new ExtractedImports(results, phase == POST_IMPORT);
+        return importSec;
     }
 
-    private int nextPart(String line, int previousPhase) {
-        if (previousPhase == PRE_IMPORT && Objects.equals(line, "import (")) {
-            return IMPORT_SECTION;
-        }
-        if (previousPhase == IMPORT_SECTION && Objects.equals(line, ")")) {
-            return POST_IMPORT;
-        }
-        return previousPhase;
-    }
-
-    private String importPath(String s) {
+    private @NotNull String importPath(String s) {
         s = s.trim();
         String[] groups = s.split(" ");
         String path = groups[groups.length - 1];
@@ -183,7 +155,7 @@ public class GoImportTidy extends AnAction {
         return unquote(path);
     }
 
-    private static String unquote(String val) {
+    private static @NotNull String unquote(@NotNull String val) {
         if ((val.startsWith("\"") && val.endsWith("\""))
                 || (val.startsWith("'") && val.endsWith("'"))) {
             return val.substring(1, val.length() - 1);

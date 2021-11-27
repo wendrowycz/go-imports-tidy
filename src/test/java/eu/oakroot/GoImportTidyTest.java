@@ -1,15 +1,20 @@
+package eu.oakroot;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GoImportTidyTest extends GoImportTidy {
 
@@ -27,9 +32,15 @@ class GoImportTidyTest extends GoImportTidy {
     @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     void testParseFile(String input, String expected, Boolean isParsed) throws IOException {
         String expectedOutput = FileUtils.readFileToString(new File("src/test/resources/fixtures/" + expected), "utf-8");
-        BufferedReader inputFile = new BufferedReader(new FileReader("src/test/resources/fixtures/" + input));
-        ParsedFile parsedFile = parseFile(inputFile, "github.com/namespace");
-        assertEquals(expectedOutput, parsedFile.getFileContent());
+        String expectedParsed = StringUtils.substringBetween(expectedOutput, "import (", ")");
+        if (expectedParsed == null) {
+            expectedParsed = "";
+        }
+        String inputFile = Files.readString(Path.of("src/test/resources/fixtures/" + input));
+        String imports = findImports (inputFile);
+        ArrayList<String> importsBlock = new ArrayList<>(Arrays.asList(imports.split("\n")));
+        ParsedFile parsedFile = parseFile(importsBlock, "github.com/namespace");
+        assertEquals(expectedParsed, parsedFile.getFileContent());
         assertEquals(isParsed, parsedFile.isParsed());
     }
 }

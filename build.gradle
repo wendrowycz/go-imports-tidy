@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'eu.oakroot'
-version '1.0.0'
+version '1.0.2'
 
 repositories {
     mavenCentral()
@@ -22,9 +22,8 @@ intellij {
     type = 'GO'
 }
 patchPluginXml {
-    changeNotes = """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    version = '1.0.0'
+    changeNotes = """"""
 }
 test {
     useJUnitPlatform()
