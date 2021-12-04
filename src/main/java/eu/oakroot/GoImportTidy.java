@@ -47,7 +47,7 @@ public class GoImportTidy extends AnAction {
         try {
             String importsBlockStr = findImports(document.getText());
             ArrayList<String> importsBlock = new ArrayList<>(Arrays.asList(importsBlockStr.split("\n")));
-            String local = TidyProjectSettingsConfigurable.getOptionTextString(project, "localPrefix");
+            String local = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX);
             ParsedFile parsedFile = parseFile(importsBlock, local);
             if (parsedFile.isParsed()) {
                 String newContent = document.getText().replaceAll(importsBlockStr, parsedFile.getFileContent());

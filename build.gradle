@@ -22,9 +22,43 @@ intellij {
     type = 'GO'
 }
 patchPluginXml {
-    version = '1.0.0'
-    changeNotes = """"""
+    version = '1.0.2'
+    changeNotes = """
+      <h3> changelog for 1.0.2 </h3>
+       <ul>
+         <li> Experimental section added in configuration </li>
+         <li> Formatting on save is disabled by default </li>
+       </ul>
+
+       <H2> Release Notes for 1.0.1 </H2>
+       <ul>
+         <li> Format imports on save </li>
+         <li> Add "Tidy imports" action to editor submenu </li>
+       </ul>
+       <h3> changelog for version 1.0.0 </h3>
+       <ul>
+         <li> Added "Tidy imports" action in the tools menu </li>
+         <li> Add plug-in configuration </li>
+         <li> Support for build 2021.2 </li>
+       </ul>
+"""
 }
 test {
     useJUnitPlatform()
+}
+
+signPlugin {
+    certificateChain = System.getenv("CERTIFICATE_CHAIN") ?: "annnnn"
+    privateKey = System.getenv("PRIVATE_KEY") ?: "nonnn"
+    password = System.getenv("PRIVATE_KEY_PASSWORD")
+}
+
+publishPlugin {
+    token = System.getenv("PUBLISH_TOKEN")
+}
+if (hasProperty('buildScan')) {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
 }

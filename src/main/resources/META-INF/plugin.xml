@@ -3,14 +3,21 @@
     <name>GO Imports Tidy</name>
     <vendor email="bartosz.grzesiak@oakroot.eu" url="http://oakroot.eu">OAK ROOT</vendor>
 
-    <description><![CDATA[This tool updates your Go import lines, grouping it into three groups:]]></description>
+    <description><![CDATA[
+    This tool updates your Go import lines, grouping it into three groups:
+    <ul>
+        <li>standard libraries</li>
+        <li>external libraries</li>
+        <li>local libraries (optional)</li>
+    </ul>
+    ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectConfigurable instance="eu.oakroot.TidyProjectSettingsConfigurable"/>
+        <projectConfigurable instance="eu.oakroot.TidyImportsSettingsConfigurable"/>
     </extensions>
 
     <projectListeners>
@@ -24,7 +31,7 @@
             <override-text place="MainMenu" text="Tidy Imports" />
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" second-keystroke="C" keymap="$default"/>
             <mouse-shortcut keymap="$default" keystroke="control button3 doubleClick"/>
-            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last" />
         </action>
     </actions>

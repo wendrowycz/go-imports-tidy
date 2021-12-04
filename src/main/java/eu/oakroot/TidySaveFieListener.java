@@ -1,5 +1,6 @@
 package eu.oakroot;
 
+import com.intellij.openapi.command.CommandProcessor;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManagerListener;
@@ -18,15 +19,23 @@ public class TidySaveFieListener implements FileDocumentManagerListener {
     public void beforeDocumentSaving(@NotNull Document document) {
         Project[] projects = ProjectManager.getInstance().getOpenProjects();
         for(Project project: projects) {
+            if (!TidyImportsSettingsConfigurable.isOptionActive(project, TidyImportsOptionsForm.FORMAT_ON_SAVE)) {
+                continue;
+            }
             GoImportTidy goImportTidy = new GoImportTidy();
 
             String importsBlockStr = goImportTidy.findImports(document.getText());
             ArrayList<String> importsBlock = new ArrayList<>(Arrays.asList(importsBlockStr.split("\n")));
-            String local = TidyProjectSettingsConfigurable.getOptionTextString(project, "localPrefix");
+            String local = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX);
             try {
                 ParsedFile parsedFile = goImportTidy.parseFile(importsBlock, local);
                 if (parsedFile.isParsed()) {
-                    document.setText(document.getText().replaceAll(importsBlockStr, parsedFile.getFileContent()));
+                    CommandProcessor.getInstance().runUndoTransparentAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            document.setText(document.getText().replaceAll(importsBlockStr, parsedFile.getFileContent()));
+                        }
+                    });
                 }
             } catch (IOException e) {
                 LOG.debug(e.getMessage());
