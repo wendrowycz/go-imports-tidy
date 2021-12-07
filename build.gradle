@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'eu.oakroot'
-version '1.0.2'
+version '1.0.4'
 
 repositories {
     mavenCentral()
@@ -18,18 +18,21 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.2.3'
+    version = '2021.3'
     type = 'GO'
 }
 patchPluginXml {
-    version = '1.0.2'
+    version = '1.0.4'
     changeNotes = """
+      <h3> changelog for 1.0.4 </h3>
+       <ul>
+         <li> Support for build 2021.3 </li>
+       </ul>
       <h3> changelog for 1.0.2 </h3>
        <ul>
          <li> Experimental section added in configuration </li>
          <li> Formatting on save is disabled by default </li>
        </ul>
-
        <H2> Release Notes for 1.0.1 </H2>
        <ul>
          <li> Format imports on save </li>

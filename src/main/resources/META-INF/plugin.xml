@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>eu.oakroot.go-imports-tidy</id>
     <name>GO Imports Tidy</name>
-    <vendor email="bartosz.grzesiak@oakroot.eu" url="http://oakroot.eu">OAK ROOT</vendor>
+    <vendor email="bartosz.grzesiak@oakroot.eu" url="">OAK ROOT</vendor>
 
     <description><![CDATA[
     This tool updates your Go import lines, grouping it into three groups:
