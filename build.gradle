@@ -1,29 +1,33 @@
 plugins {
-    id 'org.jetbrains.intellij' version '1.2.1'
+    id 'org.jetbrains.intellij' version '1.5.2'
     id 'java'
 }
 
 group 'eu.oakroot'
-version '1.0.4'
+version '1.0.5'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.3'
+    version = '2022.1'
     type = 'GO'
 }
 patchPluginXml {
-    version = '1.0.4'
+    version = '1.0.5'
     changeNotes = """
+      <h3> changelog for 1.0.5 </h3>
+       <ul>
+         <li> Support for build 2022.1 </li>
+       </ul>
       <h3> changelog for 1.0.4 </h3>
        <ul>
          <li> Support for build 2021.3 </li>

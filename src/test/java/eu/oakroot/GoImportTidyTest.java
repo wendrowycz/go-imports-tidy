@@ -2,8 +2,8 @@ package eu.oakroot;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GoImportTidyTest extends GoImportTidy {
 
-    @Before
-    public void SetUp() {
+    @BeforeAll
+    public static void SetUp() {
         System.out.println("Setup tests");
     }
 
-    @After
-    public void Teardown() {
+    @AfterAll
+    public static void Teardown() {
         System.out.println("Teardown");
     }
 
