@@ -18,12 +18,16 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2022.1'
+    version = '2022.2'
     type = 'GO'
 }
 patchPluginXml {
-    version = '1.0.5'
+    version = '1.0.6'
     changeNotes = """
+      <h3> changelog for 1.0.6 </h3>
+       <ul>
+         <li> Support for build 2022.2 </li>
+       </ul>
       <h3> changelog for 1.0.5 </h3>
        <ul>
          <li> Support for build 2022.1 </li>
