@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'eu.oakroot'
-version '1.0.5'
+version '1.0.7'
 
 repositories {
     mavenCentral()
@@ -22,8 +22,12 @@ intellij {
     type = 'GO'
 }
 patchPluginXml {
-    version = '1.0.6'
+    version = '1.0.7'
     changeNotes = """
+      <h3> changelog for 1.0.7 </h3>
+       <ul>
+         <li> Change the icon size </li>
+       </ul>
       <h3> changelog for 1.0.6 </h3>
        <ul>
          <li> Support for build 2022.2 </li>
