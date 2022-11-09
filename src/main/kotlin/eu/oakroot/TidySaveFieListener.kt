@@ -36,7 +36,6 @@ class TidySaveFieListener : FileDocumentManagerListener {
             ArrayList(Arrays.asList(*importsBlockStr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()))
         val local = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
-        LOG.warn("Local namespace: $local for project: $project")
         try {
             val parsedFile = goImportTidy.parseFile(importsBlock, local)
             if (parsedFile.isParsed) {

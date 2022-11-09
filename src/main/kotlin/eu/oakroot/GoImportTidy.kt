@@ -3,7 +3,6 @@ package eu.oakroot
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -45,13 +44,12 @@ open class GoImportTidy : AnAction() {
     }
 
     fun parseFile(importsBlock: java.util.ArrayList<String>, local: String): ParsedFile {
-        LOG.warn("GO TIDY: $local, imports: $importsBlock")
         val contents = extractImports(importsBlock)
         if (contents.size == 0) {
             return ParsedFile("", false)
         }
         val imports: ArrayList<String> = formatImports(contents, local)
-        val parsed:String = imports.joinToString("\n")
+        val parsed:String = "\n" + imports.joinToString("\n") + "\n"
         return ParsedFile(parsed, true)
     }
 
@@ -134,9 +132,5 @@ open class GoImportTidy : AnAction() {
                 v.substring(1, v.length - 1)
             } else v
         }
-
-        private val LOG = Logger.getInstance(
-            TidySaveFieListener::class.java
-        )
     }
 }

@@ -1,3 +1,4 @@
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 
 plugins {
@@ -69,9 +70,33 @@ tasks {
                 subList(indexOf(start) + 1, indexOf(end))
             }.joinToString("\n").run { markdownToHTML(this) }
         )
+
+        changeNotes.set(renderItems())
     }
+
+    renderItems()
+
+}
+
+fun renderItems(): String {
+    var items = ""
+    changelog.getAll().forEach { (_, u) ->
+        if (!u.isUnreleased) {
+            items += changelog.renderItem(
+                u
+                    .withHeader(true)
+                    .withEmptySections(false)
+                    .withLinks(true),
+                Changelog.OutputType.HTML
+            )
+        }
+    }
+
+    return items
 }
 
 changelog {
     version.set("1.0.8")
+    groups.set(emptyList())
+    repositoryUrl.set("https://github.com/wendrowycz/go-imports-tidy")
 }

@@ -18,7 +18,7 @@ internal class GoImportTidyTest: GoImportTidy() {
     @Throws(IOException::class)
     fun testParseFile(input: String, expected: String, isParsed: Boolean?) {
         val executedOutput: String = FileUtils.readFileToString(File("src/test/resources/fixtures/$expected"), "utf-8")
-        val expectedParsed: String = StringUtils.substringBetween(executedOutput, "import (\n", "\n)")?:""
+        val expectedParsed: String = StringUtils.substringBetween(executedOutput, "import (", ")")?:""
         val inputFile: String = Files.readString(Path.of("src/test/resources/fixtures/$input"))
         val imports: String = findImports(inputFile)
         val importsBlock: ArrayList<String> = ArrayList(Arrays.asList(*imports.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
