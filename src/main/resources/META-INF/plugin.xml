@@ -1,33 +1,32 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
     <id>eu.oakroot.go-imports-tidy</id>
     <name>GO Imports Tidy</name>
     <vendor email="bartosz.grzesiak@oakroot.eu" url="">OAK ROOT</vendor>
 
-    <description><![CDATA[
-    This tool updates your Go import lines, grouping it into three groups:
-    <ul>
-        <li>standard libraries</li>
-        <li>external libraries</li>
-        <li>local libraries (optional)</li>
-    </ul>
-    ]]></description>
-
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <projectConfigurable instance="eu.oakroot.TidyImportsSettingsConfigurable"/>
+        <projectConfigurable
+                instance="eu.oakroot.TidyImportsSettingsConfigurable"
+                id="eu.oakroot.TidyImportsSettingsConfigurable"
+                displayName="GO Tidy Imports"
+                nonDefaultProject="true"
+        />
     </extensions>
 
     <projectListeners>
-        <listener class="eu.oakroot.TidySaveFieListener" topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"  />
+        <listener class="eu.oakroot.TidySaveFieListener" topic="com.intellij.openapi.fileEditor.FileDocumentManagerListener"/>
     </projectListeners>
 
     <actions>
-        <!-- Add your actions here -->
         <action id="eu.oakroot.GoImportTidy" class="eu.oakroot.GoImportTidy"
-                description="Group imports" text="GO Import Tidy" icon="PluginIcons.PluginIcon">
+                description="Group imports" text="GO Import Tidy" icon="TidyIcons.PluginIcon">
             <override-text place="MainMenu" text="Tidy Imports" />
             <keyboard-shortcut first-keystroke="control alt SEMICOLON" second-keystroke="C" keymap="$default"/>
             <mouse-shortcut keymap="$default" keystroke="control button3 doubleClick"/>
