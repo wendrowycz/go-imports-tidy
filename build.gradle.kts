@@ -3,13 +3,13 @@ import org.jetbrains.changelog.markdownToHTML
 
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.9.0"
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
+    id("org.jetbrains.intellij") version "1.13.3"
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("org.jetbrains.changelog") version "2.0.0"
 }
 
 "eu.oakroot".also { group = it }
-"1.0.8".also { version = it }
+"1.0.9".also { version = it }
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2022.2")
+    version.set("2023.1")
     type.set("GO") // Target IDE Platform
     plugins.set(listOf(/* Plugin Dependencies */))
 }
@@ -39,8 +39,8 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("222")
-        untilBuild.set("223.*")
+        sinceBuild.set("231")
+        untilBuild.set("241")
     }
 
     signPlugin {
@@ -58,7 +58,7 @@ tasks {
     }
 
     patchPluginXml {
-        version.set("1.0.8")
+        version.set("1.0.9")
         pluginDescription.set(
             projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
@@ -96,7 +96,7 @@ fun renderItems(): String {
 }
 
 changelog {
-    version.set("1.0.8")
+    version.set("1.0.9")
     groups.set(emptyList())
     repositoryUrl.set("https://github.com/wendrowycz/go-imports-tidy")
 }
