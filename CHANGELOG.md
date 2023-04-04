@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.0.9] - 2023-04-04
+
+### Added
+- support for build 2023.1
+
 ## [1.0.8] - 2022-11-09
 
 ### Changed
@@ -44,14 +49,15 @@
 - Format imports on save
 - Add "Tidy imports" action to editor submenu
 
-## 1.0.0 - 2021-12-04
+## [1.0.0] - 2021-12-04
 
 ### Added
 - Added "Tidy imports" action in the tools menu
 - Add plug-in configuration
 - Support for build 2021.2
 
-[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.8...HEAD
+[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.9...HEAD
+[1.0.9]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.8...v1.0.9
 [1.0.8]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.5...v1.0.6
@@ -59,5 +65,5 @@
 [1.0.4]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.2...v1.0.4
 [1.0.2]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.0...v1.0.1
-
-[//]: # ([1.0.0]: https://github.com/wendrowycz/go-imports-tidy/commits/v1.0.0)
+[1.0.0]: https://github.com/wendrowycz/go-imports-tidy/commits/v1.0.0
+[//]: #
