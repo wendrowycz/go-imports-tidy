@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- add support for comments
 
 ## [1.0.9] - 2023-04-04
 

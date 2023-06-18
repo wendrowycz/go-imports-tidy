@@ -12,3 +12,4 @@ three_groups_2_input,three_groups_2_expected,true
 two_groups_1_input,two_groups_1_expected,true
 two_groups_2_input,two_groups_2_expected,true
 two_groups_3_input,two_groups_3_expected,true
+comments_sorting_input,comments_sorting_expected,true

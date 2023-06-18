@@ -1,7 +1,6 @@
 package eu.oakroot
 
 import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.StringUtils
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
@@ -17,8 +16,8 @@ internal class GoImportTidyTest: GoImportTidy() {
     @CsvFileSource(resources = ["/data.csv"], numLinesToSkip = 1)
     @Throws(IOException::class)
     fun testParseFile(input: String, expected: String, isParsed: Boolean?) {
-        val executedOutput: String = FileUtils.readFileToString(File("src/test/resources/fixtures/$expected"), "utf-8")
-        val expectedParsed: String = StringUtils.substringBetween(executedOutput, "import (", ")")?:""
+        val expectedOutput: String = FileUtils.readFileToString(File("src/test/resources/fixtures/$expected"), "utf-8")
+        val expectedParsed: String = expectedImports(expectedOutput)
         val inputFile: String = Files.readString(Path.of("src/test/resources/fixtures/$input"))
         val imports: String = findImports(inputFile)
         val importsBlock: ArrayList<String> = ArrayList(Arrays.asList(*imports.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
@@ -28,4 +27,11 @@ internal class GoImportTidyTest: GoImportTidy() {
 
     }
 
+    private fun expectedImports(expectedOutput: String): String {
+        var expImports: String = findImports(expectedOutput)
+        if (expImports.isNotEmpty()) {
+            expImports = "\n" + expImports + "\n"
+        }
+        return expImports
+    }
 }

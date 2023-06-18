@@ -7,7 +7,6 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
-import org.apache.commons.lang3.StringUtils
 import java.io.IOException
 
 @Suppress("MissingActionUpdateThread")
@@ -49,7 +48,7 @@ open class GoImportTidy : AnAction() {
             return ParsedFile("", false)
         }
         val imports: ArrayList<String> = formatImports(contents, local)
-        val parsed:String = "\n" + imports.joinToString("\n") + "\n"
+        val parsed: String = "\n" + imports.joinToString("\n") + "\n"
         return ParsedFile(parsed, true)
     }
 
@@ -60,16 +59,33 @@ open class GoImportTidy : AnAction() {
         val stdLib = ArrayList<String>()
         val locLib = ArrayList<String>()
         val extLib = ArrayList<String>()
+        var comments = ArrayList<String>()
+        val hasComments = HashMap<String, ArrayList<String>>()
 
         for (imp: String in imports) {
             if (imp.trim { it <= ' ' } == "") {
                 continue
             }
-            when (group(imp, local)) {
-                STD_LIB -> stdLib.add(imp)
-                EXTERNAL_LIB -> extLib.add(imp)
-                LOCAL_LIB -> locLib.add(imp)
+
+            if (imp.trim().startsWith("//")) {
+                comments.add(imp)
+                continue
             }
+            when (group(imp, local)) {
+                STD_LIB -> {
+                    stdLib.add(imp)
+                    hasComments[imp.trim()] = comments
+                }
+                EXTERNAL_LIB -> {
+                    extLib.add(imp)
+                    hasComments[imp.trim()] = comments
+                }
+                LOCAL_LIB -> {
+                    locLib.add(imp)
+                    hasComments[imp.trim()] = comments
+                }
+            }
+            comments = ArrayList()
         }
         groups[STD_LIB] = stdLib
         groups[EXTERNAL_LIB] = extLib
@@ -85,7 +101,17 @@ open class GoImportTidy : AnAction() {
             results.addAll(groupImports)
             needEmptyLine = true
         }
-        return results
+        val resultsWithComments = ArrayList<String>()
+        for (l in results) {
+            if (hasComments.contains(l.trim())) {
+                val cms = hasComments[l.trim()]
+                if (cms != null) {
+                    resultsWithComments.addAll(cms)
+                }
+            }
+            resultsWithComments.add(l)
+        }
+        return resultsWithComments
     }
 
     private fun group(s: String, local: String): Int {
@@ -101,7 +127,7 @@ open class GoImportTidy : AnAction() {
     private fun extractImports(importsBlock: java.util.ArrayList<String>): ArrayList<String> {
         val importSec = ArrayList<String>()
         for (line in importsBlock) {
-            if (!line.contains("\"") || line.isEmpty()) {
+             if ((!line.contains("\"") && !line.contains("//")) || line.isEmpty()) {
                 continue
             }
             importSec.add(line)
@@ -110,7 +136,22 @@ open class GoImportTidy : AnAction() {
     }
 
     fun findImports(document: String?): String {
-        return StringUtils.substringBetween(document, "import (", ")") ?: return ""
+        val lines = document?.lines() ?: return ""
+        var inImportBlock = false
+        val importStatements = mutableListOf<String>()
+        for (line in lines) {
+            if (line.contains("import (")) {
+                inImportBlock = true
+                continue
+            }
+            if (line.contains(")") && !line.trim().startsWith("//")) {
+                break
+            }
+            if (inImportBlock) {
+                importStatements.add(line)
+            }
+        }
+        return importStatements.joinToString("\n")
     }
 
     private fun importPath(str: String): String {
