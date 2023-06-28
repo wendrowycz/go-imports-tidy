@@ -38,11 +38,12 @@ class TidySaveFieListener : FileDocumentManagerListener {
         val local = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
         try {
             val parsedFile = goImportTidy.parseFile(importsBlock, local)
+            val importBlock = goImportTidy.extractBlockContent(document.text)
             if (parsedFile.isParsed) {
                 CommandProcessor.getInstance().runUndoTransparentAction {
                     document.setText(
                         document.text.replace(
-                            importsBlockStr.toRegex(),
+                            importBlock,
                             parsedFile.fileContent
                         )
                     )
