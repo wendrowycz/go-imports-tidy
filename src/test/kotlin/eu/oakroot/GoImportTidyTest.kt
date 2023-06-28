@@ -17,7 +17,7 @@ internal class GoImportTidyTest: GoImportTidy() {
     @Throws(IOException::class)
     fun testParseFile(input: String, expected: String, isParsed: Boolean?) {
         val expectedOutput: String = FileUtils.readFileToString(File("src/test/resources/fixtures/$expected"), "utf-8")
-        val expectedParsed: String = expectedImports(expectedOutput)
+        val expectedParsed: String = findImports(expectedOutput)
         val inputFile: String = Files.readString(Path.of("src/test/resources/fixtures/$input"))
         val imports: String = findImports(inputFile)
         val importsBlock: ArrayList<String> = ArrayList(Arrays.asList(*imports.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
@@ -25,13 +25,5 @@ internal class GoImportTidyTest: GoImportTidy() {
         Assertions.assertEquals(expectedParsed, parsedFile.fileContent)
         Assertions.assertEquals(isParsed, parsedFile.isParsed)
 
-    }
-
-    private fun expectedImports(expectedOutput: String): String {
-        var expImports: String = findImports(expectedOutput)
-        if (expImports.isNotEmpty()) {
-            expImports = "\n" + expImports + "\n"
-        }
-        return expImports
     }
 }

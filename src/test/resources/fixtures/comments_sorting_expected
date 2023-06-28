@@ -1,10 +1,14 @@
 package main
 
 import (
+    "fmt"
+
     "github.com/pkg/errors"
 
-    "github.com/namespace/mypackage1"
     // TODO(me): blah blah "github.com/foo"
+    // more comments comments comments
+    "github.com/namespace/mypackage1"
+    // TODO(me): blah blah "github.com/bar"
     // more comments comments comments
     "github.com/namespace/mypackage2"
     "github.com/namespace/mypackage3"

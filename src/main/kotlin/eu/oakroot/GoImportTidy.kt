@@ -30,17 +30,38 @@ open class GoImportTidy : AnAction() {
                 TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
             val parsedFile: ParsedFile = parseFile(importsBlock, local)
             if (parsedFile.isParsed) {
-                val newContent: String = document.text.replace(importsBlockStr.toRegex(), parsedFile.fileContent)
-                val cmd = Runnable {
-                    document.setReadOnly(false)
-                    document.setText(newContent)
+                val importBlock = extractBlockContent(document.text)
+                if (importBlock != "") {
+                    val modifiedInput = document.text.replace(importBlock, parsedFile.fileContent)
+                    val cmd = Runnable {
+                        document.setReadOnly(false)
+                        document.setText(modifiedInput)
+                    }
+                    WriteCommandAction.runWriteCommandAction(project, cmd)
                 }
-                WriteCommandAction.runWriteCommandAction(project, cmd)
             }
         } catch (err : IOException) {
             err.printStackTrace()
         }
     }
+
+    fun extractBlockContent(input: String): String {
+        val importStart = input.indexOf("import (")
+        if (importStart == -1) {
+            return ""
+        }
+
+        val importEnd = input.indexOf(")\n", startIndex = importStart)
+        if (importEnd == -1) {
+            return ""
+        }
+
+        val blockContent = input.substring(importStart, importEnd + 1)
+        val lines = blockContent.lines().drop(1).dropLast(1)
+
+        return lines.joinToString("\n")
+    }
+
 
     fun parseFile(importsBlock: java.util.ArrayList<String>, local: String): ParsedFile {
         val contents = extractImports(importsBlock)
@@ -48,7 +69,7 @@ open class GoImportTidy : AnAction() {
             return ParsedFile("", false)
         }
         val imports: ArrayList<String> = formatImports(contents, local)
-        val parsed: String = "\n" + imports.joinToString("\n") + "\n"
+        val parsed: String = imports.joinToString("\n")
         return ParsedFile(parsed, true)
     }
 

@@ -9,7 +9,7 @@ plugins {
 }
 
 "eu.oakroot".also { group = it }
-"1.0.10".also { version = it }
+"1.0.11".also { version = it }
 
 repositories {
     mavenCentral()
@@ -58,7 +58,7 @@ tasks {
     }
 
     patchPluginXml {
-        version.set("1.0.10")
+        version.set("1.0.11")
         pluginDescription.set(
             projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
@@ -96,7 +96,7 @@ fun renderItems(): String {
 }
 
 changelog {
-    version.set("1.0.10")
+    version.set("1.0.11")
     groups.set(emptyList())
     repositoryUrl.set("https://github.com/wendrowycz/go-imports-tidy")
 }
