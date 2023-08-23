@@ -26,9 +26,8 @@ open class GoImportTidy : AnAction() {
         try {
             val importsBlockStr:String = findImports(document.text)
             val importsBlock: ArrayList<String> = ArrayList(listOf(*importsBlockStr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
-            val local: String =
-                TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
-            val parsedFile: ParsedFile = parseFile(importsBlock, local)
+            val locals: List<String> = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX).split(",").map { it.trim() }.filter { it.isNotEmpty() }
+                val parsedFile: ParsedFile = parseFile(importsBlock, locals)
             if (parsedFile.isParsed) {
                 val importBlock = extractBlockContent(document.text)
                 if (importBlock != "") {
@@ -63,17 +62,17 @@ open class GoImportTidy : AnAction() {
     }
 
 
-    fun parseFile(importsBlock: java.util.ArrayList<String>, local: String): ParsedFile {
+    fun parseFile(importsBlock: java.util.ArrayList<String>, locals: List<String>): ParsedFile {
         val contents = extractImports(importsBlock)
         if (contents.size == 0) {
             return ParsedFile("", false)
         }
-        val imports: ArrayList<String> = formatImports(contents, local)
+        val imports: ArrayList<String> = formatImports(contents, locals)
         val parsed: String = imports.joinToString("\n")
         return ParsedFile(parsed, true)
     }
 
-    private fun formatImports(imports: java.util.ArrayList<String>, local: String): ArrayList<String> {
+    private fun formatImports(imports: java.util.ArrayList<String>, locals: List<String>): ArrayList<String> {
         val results = ArrayList<String>()
         var needEmptyLine = false
         val groups: MutableMap<Int, ArrayList<String>> = HashMap()
@@ -92,7 +91,7 @@ open class GoImportTidy : AnAction() {
                 comments.add(imp)
                 continue
             }
-            when (group(imp, local)) {
+            when (group(imp, locals)) {
                 STD_LIB -> {
                     stdLib.add(imp)
                     hasComments[imp.trim()] = comments
@@ -135,12 +134,13 @@ open class GoImportTidy : AnAction() {
         return resultsWithComments
     }
 
-    private fun group(s: String, local: String): Int {
+    private fun group(s: String, locals: List<String>): Int {
         val path: String = importPath(s)
         if (!s.contains(".")) {
             return STD_LIB
         }
-        return if (path != "" && path.contains(local, true)) {
+
+        return if (path != "" && locals.any { local -> path.contains(local, true)}) {
             LOCAL_LIB
         } else EXTERNAL_LIB
     }

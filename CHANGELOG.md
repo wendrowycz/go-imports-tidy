@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-08-23
+
+### Added
+- support multiple local namespace
+
 ## [1.0.11] - 2023-06-28
 
 ### Fixed
@@ -67,7 +72,8 @@
 - Add plug-in configuration
 - Support for build 2021.2
 
-[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.11...HEAD
+[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.11...v1.1.0
 [1.0.11]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.10...v1.0.11
 [1.0.10]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.9...v1.0.10
 [1.0.9]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.8...v1.0.9
