@@ -21,7 +21,8 @@ internal class GoImportTidyTest: GoImportTidy() {
         val inputFile: String = Files.readString(Path.of("src/test/resources/fixtures/$input"))
         val imports: String = findImports(inputFile)
         val importsBlock: ArrayList<String> = ArrayList(Arrays.asList(*imports.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
-        val parsedFile: ParsedFile = parseFile(importsBlock, "github.com/namespace")
+        val locals: List<String> = "github.com/namespace,".split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        val parsedFile: ParsedFile = parseFile(importsBlock, locals)
         Assertions.assertEquals(expectedParsed, parsedFile.fileContent)
         Assertions.assertEquals(isParsed, parsedFile.isParsed)
 

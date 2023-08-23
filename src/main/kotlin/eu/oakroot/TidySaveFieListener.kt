@@ -35,9 +35,9 @@ class TidySaveFieListener : FileDocumentManagerListener {
         val importsBlock =
             ArrayList(Arrays.asList(*importsBlockStr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()))
-        val local = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
+        val locals: List<String> = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX).split(",").map { it.trim() }.filter { it.isNotEmpty() }
         try {
-            val parsedFile = goImportTidy.parseFile(importsBlock, local)
+            val parsedFile = goImportTidy.parseFile(importsBlock, locals)
             val importBlock = goImportTidy.extractBlockContent(document.text)
             if (parsedFile.isParsed) {
                 CommandProcessor.getInstance().runUndoTransparentAction {

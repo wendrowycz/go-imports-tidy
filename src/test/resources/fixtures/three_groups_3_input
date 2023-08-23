@@ -1,0 +1,21 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/username/c"
+	"github.com/username/a"
+	"github.com/username/b"
+
+	"gitlab.com/namespace/a"
+	"gitlab.com/namespace/b"
+	"gitlab.com/namespace/b"
+
+	"github.com/namespace/a"
+	"github.com/namespace/b"
+	"github.com/namespace/c"
+)
+
+func main() {
+	fmt.Println()
+}
