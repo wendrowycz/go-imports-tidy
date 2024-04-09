@@ -9,7 +9,7 @@ plugins {
 }
 
 "eu.oakroot".also { group = it }
-"1.1.0".also { version = it }
+"1.1.1".also { version = it }
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
-    version.set("2023.1")
+    version.set("2024.1")
     type.set("GO") // Target IDE Platform
     plugins.set(listOf(/* Plugin Dependencies */))
 }
@@ -39,8 +39,8 @@ tasks {
     }
 
     patchPluginXml {
-        sinceBuild.set("231")
-        untilBuild.set("241")
+        sinceBuild.set("241")
+        untilBuild.set("251")
     }
 
     signPlugin {
@@ -58,7 +58,7 @@ tasks {
     }
 
     patchPluginXml {
-        version.set("1.1.0")
+        version.set("1.1.1")
         pluginDescription.set(
             projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
@@ -96,7 +96,7 @@ fun renderItems(): String {
 }
 
 changelog {
-    version.set("1.1.0")
+    version.set("1.1.1")
     groups.set(emptyList())
     repositoryUrl.set("https://github.com/wendrowycz/go-imports-tidy")
 }
