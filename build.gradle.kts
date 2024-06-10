@@ -8,8 +8,10 @@ plugins {
     id("org.jetbrains.changelog") version "2.0.0"
 }
 
-"eu.oakroot".also { group = it }
-"1.1.1".also { version = it }
+val projectVersion = "1.1.2"
+
+group = "eu.oakroot"
+version = projectVersion
 
 repositories {
     mavenCentral()
@@ -27,7 +29,6 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
-
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
@@ -40,7 +41,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("241")
-        untilBuild.set("251")
+        untilBuild.set("251.*")
     }
 
     signPlugin {
@@ -58,7 +59,7 @@ tasks {
     }
 
     patchPluginXml {
-        version.set("1.1.1")
+        version.set(projectVersion)
         pluginDescription.set(
             projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
@@ -96,7 +97,7 @@ fun renderItems(): String {
 }
 
 changelog {
-    version.set("1.1.1")
+    version.set(projectVersion)
     groups.set(emptyList())
     repositoryUrl.set("https://github.com/wendrowycz/go-imports-tidy")
 }

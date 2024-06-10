@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+## [1.1.2] - 2024-06-10
+- fix: Invalid plugin descriptor 'plugin.xml'
+
 ## [1.1.1] - 2024-04-09
 - support for build 2024.1
 
@@ -75,7 +78,8 @@
 - Add plug-in configuration
 - Support for build 2021.2
 
-[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.11...v1.1.0
 [1.0.11]: https://github.com/wendrowycz/go-imports-tidy/compare/v1.0.10...v1.0.11
