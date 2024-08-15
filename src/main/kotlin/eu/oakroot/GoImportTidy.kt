@@ -2,6 +2,7 @@ package eu.oakroot
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
@@ -23,24 +24,30 @@ open class GoImportTidy : AnAction() {
         val editor: Editor = FileEditorManager.getInstance(project).selectedTextEditor ?: return
         val document: Document = editor.document
 
-        try {
-            val importsBlockStr:String = findImports(document.text)
-            val importsBlock: ArrayList<String> = ArrayList(listOf(*importsBlockStr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()))
-            val locals: List<String> = TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX).split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        ApplicationManager.getApplication().invokeLater {
+            try {
+                val importsBlockStr: String = findImports(document.text)
+                val importsBlock: ArrayList<String> =
+                    ArrayList(listOf(*importsBlockStr.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
+                        .toTypedArray()))
+                val locals: List<String> =
+                    TidyImportsSettingsConfigurable.getOptionTextString(project, TidyImportsOptionsForm.LOCAL_PREFIX)
+                        .split(",").map { it.trim() }.filter { it.isNotEmpty() }
                 val parsedFile: ParsedFile = parseFile(importsBlock, locals)
-            if (parsedFile.isParsed) {
-                val importBlock = extractBlockContent(document.text)
-                if (importBlock != "") {
-                    val modifiedInput = document.text.replace(importBlock, parsedFile.fileContent)
-                    val cmd = Runnable {
-                        document.setReadOnly(false)
-                        document.setText(modifiedInput)
+                if (parsedFile.isParsed) {
+                    val importBlock = extractBlockContent(document.text)
+                    if (importBlock != "") {
+                        val modifiedInput = document.text.replace(importBlock, parsedFile.fileContent)
+                        val cmd = Runnable {
+                            document.setReadOnly(false)
+                            document.setText(modifiedInput)
+                        }
+                        WriteCommandAction.runWriteCommandAction(project, cmd)
                     }
-                    WriteCommandAction.runWriteCommandAction(project, cmd)
                 }
+            } catch (err: IOException) {
+                err.printStackTrace()
             }
-        } catch (err : IOException) {
-            err.printStackTrace()
         }
     }
 
