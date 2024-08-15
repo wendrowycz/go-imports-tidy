@@ -3,6 +3,7 @@ package eu.oakroot
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.editor.Editor
@@ -24,7 +25,7 @@ open class GoImportTidy : AnAction() {
         val editor: Editor = FileEditorManager.getInstance(project).selectedTextEditor ?: return
         val document: Document = editor.document
 
-        ApplicationManager.getApplication().invokeLater {
+        ApplicationManager.getApplication().invokeLater ({
             try {
                 val importsBlockStr: String = findImports(document.text)
                 val importsBlock: ArrayList<String> =
@@ -48,7 +49,7 @@ open class GoImportTidy : AnAction() {
             } catch (err: IOException) {
                 err.printStackTrace()
             }
-        }
+        }, ModalityState.any())
     }
 
     fun extractBlockContent(input: String): String {
