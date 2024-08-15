@@ -1,33 +1,52 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.0.0"
-    id("org.jetbrains.intellij") version "1.17.3"
+    id("org.jetbrains.intellij.platform") version "2.0.1"
     id("org.jetbrains.changelog") version "2.2.0"
 }
 
-val projectVersion = "1.1.3"
+val projectVersion = "1.1.4"
 
-group = "eu.oakroot"
-version = projectVersion
+"eu.oakroot".also { group = it }
+projectVersion.also {version = it}
 
 repositories {
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     mavenCentral()
+    gradlePluginPortal()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 dependencies {
+    intellijPlatform {
+        goland("2024.2")
+
+        pluginVerifier()
+        zipSigner()
+        instrumentationTools()
+    }
     implementation("org.junit.jupiter:junit-jupiter:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
 }
 
-// Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-    version.set("2024.1")
-    type.set("GO") // Target IDE Platform
-    plugins.set(listOf(/* Plugin Dependencies */))
+intellijPlatform {
+    pluginVerification {
+        ides {
+            select {
+                types = listOf(IntelliJPlatformType.GoLand)
+                channels = listOf(ProductRelease.Channel.RELEASE)
+                sinceBuild = "241"
+                untilBuild = "251.*"
+            }
+        }
+    }
 }
 
 tasks {
@@ -40,11 +59,6 @@ tasks {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
-    }
-
-    patchPluginXml {
-        sinceBuild.set("241")
-        untilBuild.set("251.*")
     }
 
     signPlugin {
@@ -62,7 +76,7 @@ tasks {
     }
 
     patchPluginXml {
-        version.set(projectVersion)
+        pluginVersion.set(projectVersion)
         pluginDescription.set(
             projectDir.resolve("README.md").readText().lines().run {
                 val start = "<!-- Plugin description -->"
