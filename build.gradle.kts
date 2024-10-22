@@ -11,7 +11,7 @@ plugins {
     id("org.jetbrains.changelog") version "2.2.0"
 }
 
-val projectVersion = "1.1.4"
+val projectVersion = "1.1.5"
 
 "eu.oakroot".also { group = it }
 projectVersion.also {version = it}

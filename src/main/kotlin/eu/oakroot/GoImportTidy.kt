@@ -1,5 +1,6 @@
 package eu.oakroot
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
@@ -14,6 +15,10 @@ import java.io.IOException
 @Suppress("MissingActionUpdateThread")
 open class GoImportTidy : AnAction() {
     private var lexicalComparator = Comparator.comparing { s: String -> importPath(s) }
+
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.BGT
+    }
 
     override fun update(e: AnActionEvent) {
         val project: Project? = e.project
