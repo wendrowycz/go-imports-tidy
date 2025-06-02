@@ -149,12 +149,13 @@ open class GoImportTidy : AnAction() {
 
     private fun group(s: String, locals: List<String>): Int {
         val path: String = importPath(s)
-        if (!s.contains(".")) {
-            return STD_LIB
+
+        if (path != "" && locals.any { local -> path.contains(local, true) }) {
+            return LOCAL_LIB
         }
 
-        return if (path != "" && locals.any { local -> path.contains(local, true)}) {
-            LOCAL_LIB
+        return if (!s.contains(".")) {
+            STD_LIB
         } else EXTERNAL_LIB
     }
 
