@@ -12,7 +12,6 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import java.io.IOException
 
-@Suppress("MissingActionUpdateThread")
 open class GoImportTidy : AnAction() {
     private var lexicalComparator = Comparator.comparing { s: String -> importPath(s) }
 
@@ -201,11 +200,12 @@ open class GoImportTidy : AnAction() {
         const val EXTERNAL_LIB = 1
         const val LOCAL_LIB = 2
 
-        private fun unquote(v: String): String {
-            return if ((v.startsWith("\"") && v.endsWith("\"")) || (v.startsWith("'") && v.endsWith("'")))
-            {
-                v.substring(1, v.length - 1)
-            } else v
-        }
     }
+}
+
+private fun unquote(v: String): String {
+    return if ((v.startsWith("\"") && v.endsWith("\"")) || (v.startsWith("'") && v.endsWith("'")))
+    {
+        v.substring(1, v.length - 1)
+    } else v
 }

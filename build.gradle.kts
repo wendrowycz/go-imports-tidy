@@ -6,12 +6,12 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "2.0.0"
-    id("org.jetbrains.intellij.platform") version "2.0.1"
-    id("org.jetbrains.changelog") version "2.2.0"
+    id("org.jetbrains.kotlin.jvm") version "2.2.10"
+    id("org.jetbrains.intellij.platform") version "2.9.0"
+    id("org.jetbrains.changelog") version "2.4.0"
 }
 
-val projectVersion = "1.1.5"
+val projectVersion = "1.1.6"
 
 "eu.oakroot".also { group = it }
 projectVersion.also {version = it}
@@ -26,11 +26,10 @@ repositories {
 }
 dependencies {
     intellijPlatform {
-        goland("2024.2")
+        goland("2025.2")
 
         pluginVerifier()
         zipSigner()
-        instrumentationTools()
     }
     implementation("org.junit.jupiter:junit-jupiter:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
@@ -43,7 +42,7 @@ intellijPlatform {
                 types = listOf(IntelliJPlatformType.GoLand)
                 channels = listOf(ProductRelease.Channel.RELEASE)
                 sinceBuild = "241"
-                untilBuild = "251.*"
+                untilBuild = "252.*"
             }
         }
     }
